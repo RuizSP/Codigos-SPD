@@ -1,10 +1,12 @@
-matriz1 = [[1,0, 2],
-           [0,3,1],
-           [1,4,-1]]
+from random import randint
 
-matriz2 = [[0,0,3],
-           [1,2,5],
-           [-1,0,1]]
+def criaMatriz(col, row):
+           matriz = [[0 for j in range(col)] for i in range(row)]
+           for i in range(len(matriz)):
+                      for j in range(len(matriz[0])):
+                                 matriz[i][j] = randint(0,10)
+           return matriz
+
 
 def criaResultante():
 # a funcao cria uma matriz resultante de forma dinamica de acordo com as matrizes entradas    
@@ -25,7 +27,7 @@ def criaResultante():
 #multiplica cada elemento da linha atual da matriz1 pelo elemento correspondente na coluna atual da matriz2 e soma todos esses produtos. O resultado é armazenado na matriz resultante.
 
 
-def multiplicaMatriz():
+def multiplicaMatriz(matriz1, matriz2):
     matrizR = criaResultante()
     for i in range(len(matriz1)): # for utilizando o numero de linhas da matriz 1.
         for j in range(len(matriz2[0])): # for com o numero de colunas da matriz 2. considerando que a matriz tem o mesmo numero de colunas em cada linha ele pega a quantidade de colunas na primeira linha
@@ -41,7 +43,15 @@ def multiplicaMatriz():
 
 
 def main():
-     multiplicaMatriz()
+     colA = int(input("Digite o numero de Colunas da matriz A: "))
+     rowA = int(input("Digite o numero de Linhas da matriz A: "))
+     colB = int(input("Digite o numero de Colunas da matriz B: "))
+     rowB = int(input("Digite o numero de Linhas da matriz B: "))
+     matrizA = criaMatriz(colA, rowA)
+     matrizB = criaMatriz(colB, colB)
+           
+           
+     multiplicaMatriz(matrizA, matrizB)
 
 if __name__ == '__main__':
     main()
