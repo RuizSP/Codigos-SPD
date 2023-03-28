@@ -8,7 +8,7 @@ def criaMatriz(col, row):
            return matriz
 
 
-def criaResultante():
+def criaResultante(matriz1, matriz2):
 # a funcao cria uma matriz resultante de forma dinamica de acordo com as matrizes entradas    
 # por  conta das propriedade da  multipĺicação de matrizes, a matriz resultante tera o mesmo numero de linhas da matriz1
 # e o mesmo numero de colunas da matriz 2.
@@ -28,7 +28,7 @@ def criaResultante():
 
 
 def multiplicaMatriz(matriz1, matriz2):
-    matrizR = criaResultante()
+    matrizR = criaResultante(matriz1, matriz2)
     for i in range(len(matriz1)): # for utilizando o numero de linhas da matriz 1.
         for j in range(len(matriz2[0])): # for com o numero de colunas da matriz 2. considerando que a matriz tem o mesmo numero de colunas em cada linha ele pega a quantidade de colunas na primeira linha
             for k in range(len(matriz2)): # for com o numero de linhas da matriz 2.
