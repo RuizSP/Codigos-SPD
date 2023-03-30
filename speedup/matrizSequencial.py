@@ -1,4 +1,6 @@
 from random import randint
+import time
+import threading
 
 def criaMatriz(col, row):
            matriz = [[0 for j in range(col)] for i in range(row)]
@@ -40,18 +42,47 @@ def multiplicaMatriz(matriz1, matriz2):
     # e para cada linha dela percorrer cada elemento 
     # da coluna da segunda matriz realiza a multiplicação do elemento [i][j] da matriz1 pelo elemento[k][j] da matriz 2
     # e soma com valor presente na posicao [i][j] da matrizR   
-
+def CalcLinhaMatriz (matriz1, matriz2, matrizR, i):     
+        
+    if i == 0:
+        for row in range(int(len(matriz1)/2)):
+            for j in range(len(matriz2[0])):
+                for k in range(len(matriz2)):
+                    matrizR[row][j] += matriz1[row][k] * matriz2[k][j]
+    elif i==1:
+         for row in range((int(len(matriz1)/2)), len(matriz1)):
+            for j in range(len(matriz2[0])):
+                for k in range(len(matriz2)):
+                    matrizR[row][j] += matriz1[row][k] * matriz2[k][j]
+    
 
 def main():
-     colA = int(input("Digite o numero de Colunas da matriz A: "))
-     rowA = int(input("Digite o numero de Linhas da matriz A: "))
-     colB = int(input("Digite o numero de Colunas da matriz B: "))
-     rowB = int(input("Digite o numero de Linhas da matriz B: "))
-     matrizA = criaMatriz(colA, rowA)
-     matrizB = criaMatriz(colB, colB)
-           
-           
-     multiplicaMatriz(matrizA, matrizB)
+    colA = 1000
+    rowA = 1000
+    colB = 1000
+    rowB = 1000
+    matrizA = criaMatriz(colA, rowA)
+    matrizB = criaMatriz(colB, colB)
+    matrizR = criaResultante(matrizA, matrizB) 
+   # tempo1 = time.time()     
+    #multiplicaMatriz(matrizA, matrizB)
+    tempo2= time.time()
+    
+    threads = []
+
+    for i in range(2):
+        t = threading.Thread(target = CalcLinhaMatriz, args= (matrizA, matrizB, matrizR, i))
+        threads.append(t)
+        t.start()
+    for i in threads:
+        i.join()
+    tempo3 = time.time()
+    
+    print("-------------------------------------------------- Feito em paralelo------------------------------------------------------------")
+    for row in range(len(matrizR)):
+        print(matrizR[row])
+   # print(tempo2-tempo1)
+    print(tempo3-tempo2)
 
 if __name__ == '__main__':
     main()
