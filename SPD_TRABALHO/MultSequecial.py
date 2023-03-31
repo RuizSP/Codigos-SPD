@@ -17,7 +17,7 @@ def is_possible_multiply(matriz_A, matriz_B):
         exit()
 
 # --------------------------------
-#         Multiplicação da linha, pode ser usada em todos os casos
+#         Multiplicação da linha
 # --------------------------------
 
 

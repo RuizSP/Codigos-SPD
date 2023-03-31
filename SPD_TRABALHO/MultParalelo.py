@@ -6,19 +6,7 @@ import threading
 # --------------------------------
 #         Variaveis Globais
 # --------------------------------
-ROW_MATRIZ_A, COL_MATRIZ_A, ROW_MATRIZ_B, COL_MATRIZ_B, THREADS_NUMBER = 1, 1, 1, 1, 1
 DELIMITADOR = '|'
-
-#                   Float
-MATRIZ_A = np.random.rand(ROW_MATRIZ_A, COL_MATRIZ_A)
-MATRIZ_B = np.random.rand(ROW_MATRIZ_B, COL_MATRIZ_B)
-MATRIZ_C = np.zeros((ROW_MATRIZ_A, COL_MATRIZ_B))
-
-#                   Int
-# MATRIZ_A = np.random.randint(low=0, high=10, size=(ROW_MATRIZ_A, COL_MATRIZ_A))
-# MATRIZ_B = np.random.randint(low=0, high=10, size=(ROW_MATRIZ_B, COL_MATRIZ_B))
-# MATRIZ_C = np.zeros((ROW_MATRIZ_A, COL_MATRIZ_B), dtype=int)
-
 
 # --------------------------------
 #         Verifica possibilidade de multiplicar
@@ -32,16 +20,14 @@ def is_possible_multiply(matriz_A, matriz_B):
 
 
 # --------------------------------
-#         Multiplicação da linha, pode ser usada em todos os casos
+#         Multiplicação da linha
 # --------------------------------
 
 
-def multiply_row(row):
-    result_row = np.zeros(COL_MATRIZ_B)
-    for i in range(COL_MATRIZ_B):
-        for j in range(ROW_MATRIZ_B):
-            result_row[i] += MATRIZ_A[row][j] * MATRIZ_B[j][i]
-    return result_row
+def multiply_row(matriz_A_row, matriz_B, matriz_result_row):
+    for i in range(len(matriz_B[0])):
+        for j in range(len(matriz_B)):
+            matriz_result_row[i] += matriz_A_row[j] * matriz_B[j][i]
 
 
 # --------------------------------
@@ -49,29 +35,38 @@ def multiply_row(row):
 # --------------------------------
 
 
-def multiply_matriz(thread_id, worker_per_thread):
+def multiply_matriz(thread_id, worker_per_thread, matriz_A, matriz_B, matriz_result):
     for i in range(thread_id * worker_per_thread, worker_per_thread + thread_id * worker_per_thread):
-        MATRIZ_C[i] = multiply_row(i)
+        multiply_row(matriz_A[i], matriz_B, matriz_result[i])
 
 # --------------------------------
 #         Cria e inicia as threads
 # --------------------------------
 
 
-def exec():
-    threads = []
-    work_per_thread = int(ROW_MATRIZ_A / THREADS_NUMBER)
+def exec(matriz_A, matriz_B, thread_number):
 
-    for i in range(THREADS_NUMBER):
+    # para evitar bugs, a carga de trabalho tem que ser maior que 0 e thread diferete de 0
+    if (thread_number < len(matriz_A)):
+        work_per_thread = int(len(matriz_A) / thread_number)
+    else:
+        work_per_thread = 1
+        thread_number = len(matriz_A)
+
+    matriz_result = np.zeros((len(matriz_A), len(matriz_B[0])), dtype=int)
+
+    threads = []
+
+    for i in range(thread_number):
         th = threading.Thread(
             target=multiply_matriz,
-            args=(i, work_per_thread))
+            args=(i, work_per_thread, matriz_A, matriz_B, matriz_result))
         threads.append(th)
         th.start()
-
     for i in threads:
         i.join()
 
+    return matriz_result
 
 # --------------------------------
 #         Imprimir matriz
@@ -94,7 +89,7 @@ def create_random_matriz(row, col):
 
 # --------------------------------
 #         Main
-# --------------------------------plit(input())
+# --------------------------------
 
 def main():
 
@@ -105,6 +100,7 @@ def main():
     col_matriz_A = int(valores_entrada[1])
     row_matriz_B = int(valores_entrada[2])
     col_matriz_B = int(valores_entrada[3])
+    thread_number = int(valores_entrada[4])
 
     matriz_A = create_random_matriz(row_matriz_A, col_matriz_A)
     matriz_B = create_random_matriz(row_matriz_B, col_matriz_B)
@@ -112,7 +108,7 @@ def main():
     is_possible_multiply(matriz_A, matriz_B)
 
     inicio = time.time()
-    exec()
+    M = exec(matriz_A, matriz_B, thread_number)
     fim = time.time()
 
     tempo_execution = fim - inicio
