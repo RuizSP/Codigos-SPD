@@ -1,6 +1,6 @@
 import subprocess
 
-EXECUTIONS_NUMBER = 25
+EXECUTIONS_NUMBER = 5
 
 args_sequencial = ['python3', 'MultSequecial.py']
 args_paralelo2 = ['python3', 'MultParalelo2.py']
